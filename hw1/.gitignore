@@ -1,5 +1,5 @@
 #virtual enviroment
-.venv
-venv
-myenv
-.myenv
+.venv/
+venv/
+myenv/
+.myenv/
