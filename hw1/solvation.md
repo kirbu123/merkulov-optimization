@@ -52,3 +52,190 @@ k \cdot \min_{i=0, \dots, k} \|\nabla f(x^i)\|_2 \leq \sqrt{\sum_{i=0}^{k} \| \n
 \[
 \min_{i=0, \dots, k} \|\nabla f(x^i)\|_2 \leq \sqrt{\frac{2}{\alpha (k+1)} (f(x^0) - f^*)}
 \]
+
+# Accelerated methods
+1) 
+To solve this task, we need to analyze the **local convergence** of the **Heavy Ball Method** applied to the given function. The function \( f(x) \) is piecewise quadratic, meaning its gradient \( \nabla f(x) \) is piecewise linear. Since the method is known to perform well for strongly convex quadratics using the optimal hyperparameters:
+
+\[
+\alpha^* = \frac{4}{(\sqrt{L}+\sqrt{\mu})^2}, \quad \beta^* = \left(\frac{\sqrt{L} - \sqrt{\mu}}{\sqrt{L} + \sqrt{\mu}}\right)^2
+\]
+
+Given:
+
+\[
+f(x) =
+\begin{cases}
+\frac{25}{2}x^2, & \text{if } x < 1 \\
+\frac{1}{2}x^2 + 24x - 12, & \text{if } 1 \leq x < 2 \\
+\frac{25}{2}x^2 - 24x +36, & \text{if } x \geq 2
+\end{cases}
+\]
+
+and its derivative:
+
+\[
+\nabla f(x) =
+\begin{cases}
+25x, & \text{if } x < 1 \\
+x + 24, & \text{if } 1 \leq x < 2 \\
+25x - 24, & \text{if } x \geq 2
+\end{cases}
+\]
+
+Lets prove, that the given function is convex, strongly convex, smooth.
+
+Lets prove $\mu$-strong convexity and find coefficient.
+
+$\mu$-strong means, that $\forall x, y, \forall \lambda \in [0, 1]:$
+
+
+\[
+f(y) \geq f(x) + \nabla f(x) (y - x) + \frac{\mu}{2} \| y - x \|^2
+\]
+
+\[
+f(\lambda x_1 + (1 - \lambda) x_2) \leq \lambda f(x_1) + (1 - \lambda) f(x_1) - \frac{\mu}{2}\lambda (1-\lambda)\| x_1 - x_2 \|^2
+\]
+
+for function $g(x) = ax^2 + bx + c$: $\mu = 2a \Rightarrow$ for $f(x) \; \mu=2 \cdot min(\frac{25}{2}, \frac{1}{2}, \frac{25}{2}) = 2 \cdot \frac{1}{2} = 1$
+
+Lets count $L$, that will prove smoothness of function $f = f(x)$
+
+\[
+\forall x, y: \; \| \nabla f(x) - \nabla f(y) \| \leq L\| x - y \|
+\]
+
+\[
+L = max(\nabla^2f) = max(25, 1, 25) = 25
+\]
+
+Now, we are plotting the function value for $x \in [-4, 4]$ (look in the .ipynb report)
+
+\[
+\nabla f(x) = \frac{1}{m} \sum_{i=1}^{m} -b_i (1 - \sigma(b_i \langle a_i, x \rangle)) a_i + \lambda x
+\]
+
+
+
+\[
+\nabla f(x) = -\frac{1}{m} \sum_{i=1}^{m} b_i (1 - \sigma(b_i \langle a_i, x \rangle)) a_i + \lambda x
+\]
+
+2.
+
+Lets assume classification task:
+
+Logistic regression is a standard model in classification tasks. For simplicity, consider only the case of binary classification. Informally, the problem is formulated as follows: There is a training sample $\{(a_i, b_i)\}_{i=1}^m$, consisting of $m$ vectors $a_i \in \mathbb{R}^n$ (referred to as features) and corresponding numbers $b_i \in \{-1, 1\}$ (referred to as classes or labels). The goal is to construct an algorithm $b(\cdot)$, which for any new feature vector $a$ automatically determines its class $b(a) \in \{-1, 1\}$.
+In the logistic regression model, the class determination is performed based on the sign of the linear combination of the components of the vector $a$ with some fixed coefficients $x \in \mathbb{R}^n$:
+$$
+b(a) := \text{sign}(\langle a, x \rangle).
+$$
+The coefficients $x$ are the parameters of the model and are adjusted by solving the following optimization problem:
+$$
+\tag{LogReg}
+\min_{x \in \mathbb{R}^n} \left( \frac{1}{m} \sum_{i=1}^m \ln(1 + \exp(-b_i \langle a_i, x \rangle)) + \frac{\lambda}{2} \|x\|^2 \right),
+$$
+where $\lambda \geq 0$ is the regularization coefficient (a model parameter).
+
+Lets the LogReg problem be convex for $\lambda = 0$. What is the gradient of the objective function? Will it be strongly convex? What if you will add regularization with $\lambda > 0$?
+
+\[
+f(x) = \frac{1}{m} \sum_{i=1}^m \ln(1 + \exp(-b_i \langle a_i, x \rangle)) + \frac{\lambda}{2} \|x\|^2 
+\]
+
+$\forall x_1, x_2, \forall t$
+
+\[
+\frac{1}{m}\sum_{i=1}^{m}\ln(1 + \exp(-b_i(t\langle a_i, x_1\rangle + (1 - t)\langle a_i, x_2 \rangle ))) \leq
+\]
+
+\[
+\leq \frac{1}{m}\sum_{i=1}^{m}t\ln(1 + \exp(-b_i\langle a_i, x_1 \rangle))  + (1-t)\ln (1 + \exp (-b_i \langle a_i, x_2 \rangle))
+\]
+
+\[
+1 + \exp(-b_i (t \langle a_i, x_1 \rangle + (1 - t)\langle a_i, x_2 \rangle)) \leq
+\]
+
+\[
+\leq (1 + \exp ( -b_i \langle a_i, x_1 \rangle ))^t (1 + \exp (-b_i \langle a_i, x_2 \rangle))^{1-t}
+\]
+
+\[
+1 + \exp^t(-b_i \langle a_i, x_1 \rangle) \exp^{1-t}(-b_i \langle a_i, x_2 \rangle) \leq
+\]
+
+\[
+\leq 1 + \exp^t(-b_i \langle a_i, x_1 \rangle) \exp^{1-t}(-b_i \langle a_i, x_2 \rangle) + ...
+\]
+
+Thus, we define that f(x) is convex by definition of convex functions. By the way, it's still convex with any $\lambda \geq 0$.
+
+Now, we compute its gradient step by step.
+
+Each individual term inside the summation in the loss function is:
+
+\[
+\ell_i(x) = \ln(1 + \exp(-b_i \langle a_i, x \rangle))
+\]
+
+Define:
+
+\[
+z_i = \langle a_i, x \rangle
+\]
+
+Then,
+
+\[
+\ell_i(x) = \ln(1 + \exp(-b_i z_i))
+\]
+
+Differentiate w.r.t. \( x \):
+
+\[
+\nabla_x \ell_i(x) = \frac{-b_i \exp(-b_i z_i)}{1 + \exp(-b_i z_i)} a_i
+\]
+
+Using the sigmoid function definition:
+
+\[
+\sigma(y) = \frac{1}{1 + \exp(-y)}
+\]
+
+We rewrite:
+
+\[
+\nabla_x \ell_i(x) = -b_i (1 - \sigma(b_i z_i)) a_i
+\]
+
+So the gradient of the summation term is:
+
+\[
+\nabla_x \left( \frac{1}{m} \sum_{i=1}^{m} \ln(1 + \exp(-b_i \langle a_i, x \rangle)) \right) = \frac{1}{m} \sum_{i=1}^{m} -b_i (1 - \sigma(b_i \langle a_i, x \rangle)) a_i
+\]
+
+The second term in the function is:
+
+\[
+\frac{\lambda}{2} \|x\|^2
+\]
+
+Since the gradient of \(\frac{1}{2} \|x\|^2\) is simply \( x \), we get:
+
+\[
+\nabla_x \left( \frac{\lambda}{2} \|x\|^2 \right) = \lambda x
+\]
+
+Thus, the full gradient is:
+
+\[
+\nabla f(x) = \frac{1}{m} \sum_{i=1}^{m} -b_i (1 - \sigma(b_i \langle a_i, x \rangle)) a_i + \lambda x
+\]
+
+Or more compactly:
+
+\[
+\nabla f(x) = -\frac{1}{m} \sum_{i=1}^{m} b_i (1 - \sigma(b_i \langle a_i, x \rangle)) a_i + \lambda x
+\]
