@@ -3,3 +3,6 @@
 venv/
 myenv/
 .myenv/
+
+#data packages
+mushrooms.txt

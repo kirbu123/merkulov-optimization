@@ -239,3 +239,55 @@ Or more compactly:
 \[
 \nabla f(x) = -\frac{1}{m} \sum_{i=1}^{m} b_i (1 - \sigma(b_i \langle a_i, x \rangle)) a_i + \lambda x
 \]
+
+For the regularized logistic regression problem:
+
+$$\min_{x \in \mathbb{R}^n} \left( \frac{1}{m} \sum_{i=1}^{m} \ln \left( 1 + \exp(-b_i \langle a_i, x \rangle) \right) + \frac{\lambda}{2} \|x\|^2 \right)$$
+
+I'll determine the smoothness parameter $L$ and the strong convexity parameter $\mu$.
+
+The smoothness parameter $L$ is the upper bound on the eigenvalues of the Hessian matrix of the objective function.
+
+Let's compute the Hessian:
+
+1. First, let's denote $f(x) = \frac{1}{m} \sum_{i=1}^{m} \ln(1 + \exp(-b_i \langle a_i, x \rangle)) + \frac{\lambda}{2}\|x\|^2$
+
+2. The Hessian is:
+$$\nabla^2 f(x) = \frac{1}{m} \sum_{i=1}^{m} \frac{\exp(-b_i \langle a_i, x \rangle)}{(1 + \exp(-b_i \langle a_i, x \rangle))^2} \cdot a_i a_i^T + \lambda I$$
+
+3. We can simplify the first term using the logistic function $\sigma(z) = \frac{1}{1+e^{-z}}$:
+$$\nabla^2 f(x) = \frac{1}{m} \sum_{i=1}^{m} \sigma(b_i \langle a_i, x \rangle) \cdot (1-\sigma(b_i \langle a_i, x \rangle)) \cdot a_i a_i^T + \lambda I$$
+
+4. Note that $\sigma(z)(1-\sigma(z)) \leq \frac{1}{4}$ for all $z$ (maximum at $z=0$)
+
+5. Therefore:
+$$\nabla^2 f(x) \preceq \frac{1}{4m} \sum_{i=1}^{m} a_i a_i^T + \lambda I$$
+
+6. The maximum eigenvalue of the Hessian is bounded by:
+$$L = \frac{1}{4m} \lambda_{max}\left(\sum_{i=1}^{m} a_i a_i^T\right) + \lambda$$
+
+If we define $A = [a_1, a_2, \ldots, a_m]^T$, then:
+$$L = \frac{1}{4m} \lambda_{max}(A^T A) + \lambda = \frac{\|A\|_2^2}{4m} + \lambda$$
+
+where $\|A\|_2$ is the spectral norm of matrix $A$.
+
+The strong convexity parameter $\mu$ is the lower bound on the eigenvalues of the Hessian matrix.
+
+1. From the Hessian expression:
+$$\nabla^2 f(x) = \frac{1}{m} \sum_{i=1}^{m} \sigma(b_i \langle a_i, x \rangle)(1-\sigma(b_i \langle a_i, x \rangle)) \cdot a_i a_i^T + \lambda I$$
+
+2. Since $\sigma(z)(1-\sigma(z)) \geq 0$ for all $z$, we have:
+$$\nabla^2 f(x) \succeq \lambda I$$
+
+3. Therefore, the strong convexity parameter is:
+$$\mu = \lambda$$
+
+For the regularized logistic regression problem:
+
+- **Strong smoothness parameter**: $L = \frac{\|A\|_2^2}{4m} + \lambda$
+- **Strong convexity parameter**: $\mu = \lambda$
+
+The condition number of this optimization problem is therefore:
+$$\kappa = \frac{L}{\mu} = \frac{\|A\|_2^2}{4m\lambda} + 1$$
+
+This analysis shows that the regularization parameter $\lambda$ directly influences both the smoothness and convexity of the problem, and larger values of $\lambda$ improve the condition number of the problem.
