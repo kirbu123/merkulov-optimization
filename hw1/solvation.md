@@ -291,3 +291,7 @@ The condition number of this optimization problem is therefore:
 $$\kappa = \frac{L}{\mu} = \frac{\|A\|_2^2}{4m\lambda} + 1$$
 
 This analysis shows that the regularization parameter $\lambda$ directly influences both the smoothness and convexity of the problem, and larger values of $\lambda$ improve the condition number of the problem.
+
+**Conclusion**
+
+I make realisation and experiments for heavy ball and Nesterovs methods. As a convergence criteria was chosen tol=10e-6 L2 norm weights not changing criteria. All methods were works. The best betta for heavy ball $\beta = 0.6$, for Nesterovs method $\beta = -1$, strategies, used changing from iteration to iteration betta works worst, than constant methods. For all methods I plotted graphics, showing method performance on the given dataset.
