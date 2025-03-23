@@ -455,3 +455,48 @@ If $C_{precond} = O(n^3)$, then CG becomes slower when $k > O(1 + \frac{m}{n})$
 
 For many practical problems where m >> n, CG becomes slower when k is on the order of m/n or larger, depending on the exact implementation of the preconditioner.
 
+
+# Newton Method Convergence Analysis Report
+
+## Problem Description
+We analyze the behavior of Newton's method for minimizing the function:
+$$f(x,y) = \frac{x^4}{4} - x^2 + 2x + (y-1)^2$$
+starting from the initial point $(0,2)$.
+
+## Theoretical Analysis
+
+### Function Analysis
+Let's examine the components needed for Newton's method:
+
+1. **Gradient of $f$**:
+   $$\nabla f(x,y) = \begin{pmatrix} x^3 - 2x + 2 \\ 2(y-1) \end{pmatrix}$$
+
+2. **Hessian matrix of $f$**:
+   $$H(x,y) = \begin{pmatrix} 3x^2 - 2 & 0 \\ 0 & 2 \end{pmatrix}$$
+
+3. **At the starting point $(0,2)$**:
+   - $\nabla f(0,2) = \begin{pmatrix} 2 \\ 2 \end{pmatrix}$
+   - $H(0,2) = \begin{pmatrix} -2 & 0 \\ 0 & 2 \end{pmatrix}$
+
+### Newton's Method Behavior
+The Newton direction is computed as $d = -H^{-1}\nabla f$. At $(0,2)$:
+
+$d = -\begin{pmatrix} -2 & 0 \\ 0 & 2 \end{pmatrix}^{-1} \begin{pmatrix} 2 \\ 2 \end{pmatrix} = -\begin{pmatrix} -1/2 & 0 \\ 0 & 1/2 \end{pmatrix} \begin{pmatrix} 2 \\ 2 \end{pmatrix} = \begin{pmatrix} 1 \\ -1 \end{pmatrix}$
+
+**Critical Issue**: The Hessian at $(0,2)$ has a negative eigenvalue ($-2$), meaning the function is not locally convex. This causes Newton's method to move in a direction of _increasing_ function value rather than decreasing it, as it moves toward a saddle point or maximum rather than a minimum.
+
+## Comparison with Gradient Methods
+
+### Gradient Descent (Fixed Step Size α = 0.01)
+The update would be:
+$x_{k+1} = x_k - 0.01 \nabla f(x_k)$
+
+At $(0,2)$, this gives the direction $(-0.02, -0.02)$, which properly moves toward decreasing function values, though slowly.
+
+### Steepest Descent (Line Search)
+This method performs a line search in the negative gradient direction, finding an optimal step size. Since the gradient direction is correct, steepest descent will make progress toward a minimum, unlike Newton's method in this case.
+
+## Conclusion
+Newton's method fails at $(0,2)$ because the Hessian has a negative eigenvalue. This causes the method to move toward a saddle point rather than a minimum. In contrast, gradient-based methods will make progress toward a minimum, though potentially more slowly.
+
+This example highlights a key weakness of Newton's method: it requires positive definiteness of the Hessian to guarantee descent directions. When this condition is violated, the method may diverge or move toward non-minimum critical points.
