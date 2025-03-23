@@ -295,3 +295,163 @@ This analysis shows that the regularization parameter $\lambda$ directly influen
 **Conclusion**
 
 I make realisation and experiments for heavy ball and Nesterovs methods. As a convergence criteria was chosen tol=10e-6 L2 norm weights not changing criteria. All methods were works. The best betta for heavy ball $\beta = 0.6$, for Nesterovs method $\beta = -1$, strategies, used changing from iteration to iteration betta works worst, than constant methods. For all methods I plotted graphics, showing method performance on the given dataset.
+
+
+
+Chat AI Bot - Chat GPT | Midjourney | Deepseek | Perplexity, [3/22/25 5:13 PM]
+### Computational Complexity Analysis of Forming Matrices $M^{-1}$ and $M$
+
+### Problem
+
+We need to determine the number of floating-point operations (FLOP) required to compute matrices $M^{-1}$ and $M$, where:
+
+$$M^{-1} = \hat{A}^T \Phi^T \Phi \hat{A} \in \mathbb{R}^{n \times n}$$
+
+Here $\Phi = R H^{(\text{norm})}_m S \in \mathbb{R}^{(n+p) \times m}$, where:
+- $H^{(\text{norm})}_m = \frac{1}{\sqrt{m}} H_m$ - normalized Hadamard matrix of size $m \times m$
+- $R$ - row selection matrix of size $(n+p) \times m$
+- $S$ - some matrix (presumably a diagonal scaling matrix) of size $m \times m$
+- $\hat{A}$ - some matrix of size $m \times n$
+
+It is known that multiplying a Hadamard matrix by a vector $H_m v$ requires $O(m \log m)$ operations.
+
+### Solution
+
+### 1. Determining the FLOP count for computing $M^{-1}$
+
+Let's break down the computation of $M^{-1} = \hat{A}^T \Phi^T \Phi \hat{A}$ into stages.
+
+#### A. Computing $\Phi = R H^{(\text{norm})}_m S$
+
+1) Computing $H^{(\text{norm})}_m S$:
+   
+   If $S$ is a diagonal matrix, then $H^{(\text{norm})}_m S$ can be calculated by multiplying each column of $H^{(\text{norm})}_m$ by the corresponding diagonal element of $S$. This would require $m^2$ operations.
+
+   If $S$ is an arbitrary matrix, then the product $H^{(\text{norm})}_m S$ can be computed as $m$ multiplications of the matrix $H^{(\text{norm})}_m$ by the columns of $S$. According to the problem statement, each such multiplication requires $O(m \log m)$ operations, so the total complexity is $O(m^2 \log m)$.
+
+   For further calculation, we'll use the second option - the general case where computing $H^{(\text{norm})}_m S$ requires $O(m^2 \log m)$ FLOP.
+
+2) Computing $R(H^{(\text{norm})}_m S)$:
+   
+   Multiplying matrix $R$ of size $(n+p) \times m$ by matrix $(H^{(\text{norm})}_m S)$ of size $m \times m$ gives a matrix of size $(n+p) \times m$. Each element of the result requires $m$ multiplications and $m-1$ additions, giving approximately $2m$ FLOP. With a total of $(n+p) \times m$ elements, the total FLOP count is: $(n+p) \times m \times 2m = 2m^2(n+p)$.
+
+   However, since $R$ is a row selection matrix containing only one "1" in each row, multiplying $R$ by any matrix reduces to selecting the corresponding rows. This can be implemented without arithmetic floating-point operations, so we'll consider this step to require $O(1)$ FLOP.
+
+   In total, computing $\Phi = R H^{(\text{norm})}_m S$ requires $O(m^2 \log m)$ FLOP.
+
+#### B. Computing $\Phi \hat{A}$
+
+Multiplying matrix $\Phi$ of size $(n+p) \times m$ by matrix $\hat{A}$ of size $m \times n$ gives a matrix of size $(n+p) \times n$. This will typically require $(n+p) \times n \times (2m-1) \approx 2m(n+p)n$ FLOP.
+
+#### C. Computing $\Phi^T (\Phi \hat{A})$
+
+Multiplying matrix $\Phi^T$ of size $m \times (n+p)$ by matrix $(\Phi \hat{A})$ of size $(n+p) \times n$ gives a matrix of size $m \times n$. This will require $m \times n \times (2(n+p)-1) \approx 2m \times n \times (n+p)$ FLOP.
+
+#### D. Computing $\hat{A}^T (\Phi^T \Phi \hat{A})$
+
+Multiplying matrix $\hat{A}^T$ of size $n \times m$ by matrix $\Phi^T \Phi \hat{A}$ of size $m \times n$ gives a matrix of size $n \times n$. This will require $n \times n \times (2m-1) \approx 2mn^2$ FLOP.
+
+#### Total FLOP count for computing $M^{-1}$
+
+Summing all stages:
+- Computing $\Phi$: $O(m^2 \log m)$ FLOP
+- Computing $\Phi \hat{A}$: $2m(n+p)n$ FLOP
+- Computing $\Phi^T (\Phi \hat{A})$: $2m \times n \times (n+p)$ FLOP
+- Computing $\hat{A}^T (\Phi^T \Phi \hat{A})$: $2mn^2$ FLOP
+
+Since $n$ and $p$ are typically smaller than $m$, the dominant term in the total complexity will be either $O(m^2 \log m)$ (for computing $\Phi$) or $2m \times n \times (n+p)$ (for computing $\Phi^T (\Phi \hat{A})$), depending on the relationship between the values of $n$, $p$, and $\log m$.
+
+For the general case, the total complexity of computing $M^{-1}$ is:
+
+$$O(m^2 \log m + 2m(n+p)n + 2m \times n \times (n+p) + 2mn^2) = O(m^2 \log m + mn(n+p))$$
+
+
+I need to compute the FLOPs (floating point operations) required to naively compute $\hat{A}^T \hat{A}$.
+
+Given:
+- $\hat{A}$ is a dense matrix
+- We're using standard matrix multiplication algorithms
+
+Let's assume $\hat{A}$ is of size $m \times n$ (has $m$ rows and $n$ columns).
+
+Then $\hat{A}^T$ is of size $n \times m$, and the resulting product $\hat{A}^T \hat{A}$ will be of size $n \times n$.
+
+For each element of the result matrix, we need to compute the dot product of a row of $\hat{A}^T$ (which is a column of $\hat{A}$) with a column of $\hat{A}$. Each dot product requires $m$ multiplications and $m-1$ additions.
+
+Since the result matrix has $n \times n$ elements, the total number of operations is:
+- Multiplications: $n \times n \times m = n^2m$
+- Additions: $n \times n \times (m-1) = n^2(m-1) = n^2m - n^2$
+
+The total number of FLOPs is the sum of multiplications and additions:
+$n^2m + (n^2m - n^2) = 2n^2m - n^2$
+
+However, in the standard definition of FLOPs for matrix multiplication, we typically count a multiplication followed by an addition as a single FLOP pair, and the total is just $n^2m$.
+
+Therefore, the answer is $n^2m$ FLOPs.
+
+#### Step 1: Compute $u = \hat{A}v$
+- The result $u$ will be a vector in $\mathbb{R}^m$
+- For each of the $m$ elements in $u$, we compute a dot product between a row of $\hat{A}$ and $v$
+- Each dot product requires $n$ multiplications and $n-1$ additions
+- Total FLOPs for this step: $m \times (2n-1) = 2mn-m$
+  (or $mn$ if counting multiplication-addition pairs as single FLOPs)
+
+#### Step 2: Compute $\hat{A}^T u$
+- The result will be a vector in $\mathbb{R}^n$
+- For each of the $n$ elements in the result, we compute a dot product between a row of $\hat{A}^T$ (which is a column of $\hat{A}$) and $u$
+- Each dot product requires $m$ multiplications and $m-1$ additions
+- Total FLOPs for this step: $n \times (2m-1) = 2mn-n$
+  (or $mn$ if counting multiplication-addition pairs as single FLOPs)
+
+Total FLOPs for both steps:
+$(2mn-m) + (2mn-n) = 4mn-(m+n)$
+(or $2mn$ if counting multiplication-addition pairs as single FLOPs)
+
+Since we're typically counting each multiplication-addition pair as a single FLOP in matrix operations, the total cost is $2mn$ FLOPs
+
+
+
+# FLOPs Analysis for Preconditioned Conjugate Gradient Method
+
+#### Part 1: FLOPs for Preconditioned CG with k iterations
+
+In preconditioned CG, each iteration requires:
+- Matrix-vector product with $\hat{A}^T\hat{A}$ (computed as $\hat{A}^T(\hat{A}v)$): $2mn$ FLOPs
+- Preconditioning step: applying $M = (\hat{A}^T \Phi^T \Phi \hat{A})^{-1}$ to a vector
+- Vector operations (dot products, vector additions, scalar-vector multiplications): $O(n)$ FLOPs
+
+Let's analyze the preconditioning step:
+- Applying $M = (\hat{A}^T \Phi^T \Phi \hat{A})^{-1}$ directly would be expensive
+- In practice, this would be implemented by solving the system $(\hat{A}^T \Phi^T \Phi \hat{A})z = r$ for each preconditioner application
+- This would cost $O(n^3)$ if done directly, but typically more efficient methods are used 
+- Let's denote this cost as $C_{precond}$
+
+Total FLOPs for k iterations:
+$k \times (2mn + C_{precond} + O(n)) = O(k(mn + C_{precond}))$
+
+#### Part 2: FLOPs to directly solve $\hat{A}^T \hat{A} x = \hat{A}^T b$
+
+To directly solve this system:
+1. Form $\hat{A}^T\hat{A}$ explicitly: $n^2m$ FLOPs
+2. Form $\hat{A}^Tb$: $2nm$ FLOPs
+3. Solve the n×n system using Gaussian elimination: $\frac{2n^3}{3}$ FLOPs
+
+Total FLOPs for direct solution: $n^2m + 2nm + \frac{2n^3}{3} = O(n^2m + n^3)$
+
+#### Part 3: When is CG slower than direct solution?
+
+CG becomes slower when:
+$k(2mn + C_{precond} + O(n)) > n^2m + 2nm + \frac{2n^3}{3}$
+
+If we assume $C_{precond}$ dominates the per-iteration cost and is of order $O(n^2)$ or higher (which is reasonable for many preconditioners), then:
+
+$k \cdot O(C_{precond}) > O(n^2m + n^3)$
+
+For CG to be slower, k would need to be approximately:
+$k > \frac{O(n^2m + n^3)}{O(C_{precond})}$
+
+If $C_{precond} = O(n^2)$, then CG becomes slower when $k > O(m + n)$
+If $C_{precond} = O(n^3)$, then CG becomes slower when $k > O(1 + \frac{m}{n})$
+
+For many practical problems where m >> n, CG becomes slower when k is on the order of m/n or larger, depending on the exact implementation of the preconditioner.
+
