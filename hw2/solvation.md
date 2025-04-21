@@ -38,4 +38,21 @@ See test code in ```solvation.ipynb```
 
 Task 4
 
-See test coe in ```solvation.ipynb```
+See test code in ```solvation.ipynb```
+
+See page 16 of presentation 18 for method convergence evidence.
+
+Set loss function: $f(x) = ||A^{\frac{1}{2}} (x-y)||_2 - 1 + ||\Sigma x||_{\inf} - 1$
+
+Gradient of loss function: $\nabla f(x) = 2 (A^{\frac{1}{2}})^TA^{\frac{1}{2}}(x - y) + \nabla ||\Sigma x||_{\inf}$
+
+Where $\nabla f(x) =$ $
+\begin{bmatrix}
+0 \\
+... \\
+\sigma_{max} \\
+... \\
+\end{bmatrix}
+$
+
+# Proximal gradient method
