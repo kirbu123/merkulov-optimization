@@ -31,5 +31,11 @@ $\min tr((X_k^T-Y^T) S)_{S \in B_n}$
 
 See implementation in ```solvation.ipynb```
 
-### Task 
+### Task 3
 See test code in ```solvation.ipynb```
+
+# Subgradient method
+
+Task 4
+
+See test coe in ```solvation.ipynb```
