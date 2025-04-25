@@ -56,3 +56,54 @@ Where $\nabla f(x) =$ $
 $
 
 # Proximal gradient method
+
+
+
+
+### Subgradient Method
+
+For a non-smooth convex function $f(W)$, the subgradient update at step $k$ is:
+
+$ W_{k+1}=W_k−α_kg_k$ 
+
+
+where:
+
+$ α_k > 0 $ is the step size.
+
+$ g_k∈∂f(W_k) $ is any subgradient of $f$ at $W_k$​.
+
+Where:
+
+$\nabla \| W \|_1 = \text{sign}(W)$,
+
+  $$(\nabla W)_{ij} = \text{sign}(W)_{ij} = 
+  \begin{cases} 
+    +1 & \text{if } W_{ij} > 0, \\ 
+    -1 & \text{if } W_{ij} < 0, \\ 
+    \text{any } value \in [-1, 1] & \text{if } W_{ij} = 0 \ \text{(typically } 0\text{)}
+  \end{cases}$$
+
+# Proximal Gradient Method
+
+For a composite function $ f(W)=g(W)+h(W) $, where $g$ is convex and differentiable, and $h$ is convex but non-smooth, the update is:
+
+$ W_{k+1}=prox_{α_kh}(W_k−α_k∇g(W_k)) $
+
+where:
+
+$α_k ​> 0$ is the step size.
+
+$ prox_{αh}​(V)=argmin_W​(h(W)+\frac{1}{2 \alpha}​∥W−V∥_2^2​) $ is the proximal operator of $h$.
+
+See code in ```solvation.ipynb```
+
+# Big Models
+
+| Setup | # of parameters | GPU peak memory, MB | Final eval loss | Batch Size | Time to run 5 epochs, s | Generation example | Comment |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---------:|:---------:|
+| Baseline (GPT2) | 124 M | 10101 | 2.126 | 8 | 377.29 | `A long time ago in a galaxy far far away... there was a little girl named Lina. She was very curious and wanted to explore. One day, she was walking in the forest when she saw a big tree. She looked up and saw a big, shiny tree. She was so excited! She jumped up and ran to the tree, but it was too big. Lina was so excited and she ran to the tree and jumped up. She ran to the tree` | The generation seems more interesting, despite the fact, that eval loss is higher. |
+|  |  |  |  |  |  |  |  |
+|  |  |  |  |  |  |  |  |
+|  |  |  |  |  |  |  |  |
+|  |  |  |  |  |  |  |  |
