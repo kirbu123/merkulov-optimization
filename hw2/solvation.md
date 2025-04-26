@@ -102,8 +102,13 @@ See code in ```solvation.ipynb```
 
 | Setup | # of parameters | GPU peak memory, MB | Final eval loss | Batch Size | Time to run 5 epochs, s | Generation example | Comment |
 |:---:|:---:|:---:|:---:|:---:|:---:|:---------:|:---------:|
-| Baseline (GPT2) | 124 M | 10101 | 2.126 | 8 | 377.29 | `A long time ago in a galaxy far far away... there was a little girl named Lina. She was very curious and wanted to explore. One day, she was walking in the forest when she saw a big tree. She looked up and saw a big, shiny tree. She was so excited! She jumped up and ran to the tree, but it was too big. Lina was so excited and she ran to the tree and jumped up. She ran to the tree` | The generation seems more interesting, despite the fact, that eval loss is higher. |
+| Baseline (GPT2) | 124 M | 10101 | 2.126 | 8 | 377.29 | `A long time ago in a galaxy far far away... there was a little girl named Lina. She was very curious and wanted to explore. One day, she was walking in the forest when she saw a big tree. She looked up and saw a big, shiny tree. She was so excited! She jumped up and ran to the tree, but it was too big. Lina was so excited and she ran to the tree and jumped up. She ran to the tree` | |
+| facebook/opt-125m | 125 M | 6753 | 1.825 | 8 | 365.27 | `A long time ago in a galaxy far far away... there was a little girl named Lucy. She was three years old and she loved to play with her toys. One day, she decided to go to the park with her mom. She went to the park and saw a big tree. She looked around and saw a big tree with lots of flowers. She was so excited to see the big tree. She went to the tree and saw a big flower. She was so happy that she could` | |
+| facebook/opt-125m | 125 M | 4233 | 1.745 | 4 | 341.27 | `A long time ago in a galaxy far far away... there was a little girl named Lucy. Lucy was very curious and wanted to know what was happening. She asked her mom, "What is happening here?" Her mom smiled and said, "It's a big galaxy. It's very big and very bright. It's very dark and very dark. It's very scary."Lucy was scared and wanted to know what was happening. She asked her mom, "What` | |
 |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |
 |  |  |  |  |  |  |  |  |
+
+See code in ```solvation.ipynb```
+
