@@ -98,6 +98,25 @@ $ prox_{αh}​(V)=argmin_W​(h(W)+\frac{1}{2 \alpha}​∥W−V∥_2^2​) $ i
 
 See code in ```solvation.ipynb```
 
+# Stochastic gradient methods
+
+Общий вывод:
+На сильно выпуклых функциях (MSE с L2L2​):
+
+    1) SAG и SVRG сходятся линейно, обгоняя SGD.
+
+    2) SVRG предпочтительнее из-за экономии памяти.
+
+На выпуклых, но не сильно выпуклых (LogLoss без регуляризации):
+
+    1) SAG может быть нестабилен (если μ≈0).
+
+    2) SVRG всё ещё хорош, но требует аккуратного выбора частоты обновления полного градиента.
+
+    3) SGD сходится, но медленно и с большим разбросом.
+
+See code && report in ```solvation.ipynb```
+
 # Big Models
 
 | Setup | # of parameters | GPU peak memory, MB | Final eval loss | Batch Size | Time to run 5 epochs, s | Generation example | Comment |
