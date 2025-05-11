@@ -117,6 +117,10 @@ See code in ```solvation.ipynb```
 
 See code && report in ```solvation.ipynb```
 
+# Neural network training
+
+See code && report in ```solvation.ipynb```
+
 # Big Models
 
 | Setup | # of parameters | GPU peak memory, MB | Final eval loss | Batch Size | Time to run 5 epochs, s | Generation example | Comment |
